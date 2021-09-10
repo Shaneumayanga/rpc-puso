@@ -23,6 +23,13 @@ func (h *Handler) Use(mw Middleware) {
 	h.Middleware = append(h.Middleware, mw)
 }
 
+func (h *Handler) EffectMiddleWare(rw http.ResponseWriter, r *http.Request) {
+	for _, v := range h.Middleware {
+		fmt.Printf("v: %v\n", v)
+	}
+
+}
+
 func (h *Handler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	h.Use(Middleware{Mw: TestMiddleware})
 	if r.Method == http.MethodGet && r.URL.Path == "/" {
