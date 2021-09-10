@@ -49,6 +49,7 @@ func (h *Handler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 		fmt.Printf("database: %v\n", database)
 		json.NewEncoder(rw).Encode(&database)
 	}
+
 	if r.Method == http.MethodPost && r.URL.Path == "/postpusa" {
 		p := &Pusa{}
 		if err := json.NewDecoder(r.Response.Body).Decode(p); err != nil {
@@ -58,6 +59,10 @@ func (h *Handler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 		if err := h.client.Call("API.Save", p, &reply); err != nil {
 			log.Fatal(err)
 		}
+		return
+	}
+
+	if r.Method == http.MethodGet && r.URL.Path == "/login" {
 		return
 	}
 }
