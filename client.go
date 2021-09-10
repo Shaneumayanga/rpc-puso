@@ -25,7 +25,7 @@ func (h *Handler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 		fmt.Printf("database: %v\n", database)
 		json.NewEncoder(rw).Encode(&database)
 	}
-	if r.Method == http.MethodPost && r.URL.Path == "/" {
+	if r.Method == http.MethodPost && r.URL.Path == "/postpusa" {
 		p := &Pusa{}
 		if err := json.NewDecoder(r.Response.Body).Decode(p); err != nil {
 			fmt.Printf("err: %v\n", err)
