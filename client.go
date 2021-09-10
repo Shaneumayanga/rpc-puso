@@ -41,7 +41,7 @@ func (h *Handler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 }
 
 func StartClient() {
-	client, err := rpc.DialHTTP("tcp", "localhost:1234")
+	client, err := rpc.DialHTTP("tcp", ":1234")
 	if err != nil {
 		log.Fatal(err)
 	}
