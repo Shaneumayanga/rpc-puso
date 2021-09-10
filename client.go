@@ -35,7 +35,7 @@ func (h *Handler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.Method == http.MethodPost && r.URL.Path == "/" {
-
+		return
 	}
 
 }
