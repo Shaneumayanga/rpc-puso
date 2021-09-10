@@ -33,6 +33,11 @@ func (h *Handler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 		fmt.Printf("database: %v\n", database)
 		json.NewEncoder(rw).Encode(&database)
 	}
+
+	if r.Method == http.MethodPost && r.URL.Path == "/" {
+
+	}
+
 }
 
 func StartClient() {
