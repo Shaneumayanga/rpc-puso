@@ -14,11 +14,17 @@ var (
 )
 
 type Handler struct {
-	client   *rpc.Client
-	sessions *Gosession
+	client     *rpc.Client
+	sessions   *Gosession
+	Middleware []Middleware
+}
+
+func (h *Handler) Use(mw Middleware) {
+	h.Middleware = append(h.Middleware, mw)
 }
 
 func (h *Handler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+	h.Use(Middleware{Mw: TestMiddleware})
 	if r.Method == http.MethodGet && r.URL.Path == "/" {
 		values := h.sessions.Get(r, "session-cookie")
 		if values["isAuth"] != nil {
