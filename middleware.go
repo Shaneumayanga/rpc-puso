@@ -16,8 +16,6 @@ func TestMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-//lol
-
 // func IsAuth(next http.Handler) http.Handler {
 // 	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 // 		values := sessions.Get(r, "session-cookie")
