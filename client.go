@@ -26,6 +26,8 @@ func (h *Handler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 				http.Redirect(rw, r, "/login", http.StatusSeeOther)
 				return
 			}
+		} else {
+			http.Redirect(rw, r, "/login", http.StatusSeeOther)
 		}
 
 		if err := h.client.Call("API.DumpDB", "", &database); err != nil {
