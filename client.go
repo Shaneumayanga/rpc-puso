@@ -20,6 +20,14 @@ type Handler struct {
 
 func (h *Handler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet && r.URL.Path == "/" {
+		values := h.sessions.Get(r, "session-cookie")
+		if values["isAuth"] != nil {
+			if !values["isAuth"].(bool) {
+				http.Redirect(rw, r, "/login", http.StatusSeeOther)
+				return
+			}
+		}
+
 		if err := h.client.Call("API.DumpDB", "", &database); err != nil {
 			log.Fatal(err)
 		}
@@ -46,7 +54,7 @@ func StartClient() {
 		Secure:   true,
 		HttpOnly: true,
 	}
-	gosession := Newgosession("session-Cookie", options, []byte("hashKey"), []byte("blockKey"))
+	gosession := Newgosession("session-cookie", options, []byte("hashKey"), []byte("blockKey"))
 	client, err := rpc.DialHTTP("tcp", ":1234")
 	if err != nil {
 		log.Fatal(err)
