@@ -14,7 +14,8 @@ var (
 )
 
 type Handler struct {
-	client *rpc.Client
+	client   *rpc.Client
+	sessions *Gosession
 }
 
 func (h *Handler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
@@ -39,12 +40,20 @@ func (h *Handler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 }
 
 func StartClient() {
+	options := &Options{
+		Path:     "/",
+		MaxAge:   200,
+		Secure:   true,
+		HttpOnly: true,
+	}
+	gosession := Newgosession("session-Cookie", options, []byte("hashKey"), []byte("blockKey"))
 	client, err := rpc.DialHTTP("tcp", ":1234")
 	if err != nil {
 		log.Fatal(err)
 	}
 	h := &Handler{
-		client: client,
+		sessions: gosession,
+		client:   client,
 	}
 	server := &http.Server{
 		Addr:    ":8080",
