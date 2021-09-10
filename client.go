@@ -19,25 +19,23 @@ type Handler struct {
 
 func (h *Handler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet && r.URL.Path == "/" {
-		p := Pusa{
-			Name:     "Bole",
-			Laziness: 12,
-		}
-		if err := h.client.Call("API.Save", p, &reply); err != nil {
-			log.Fatal(err)
-		}
-
 		if err := h.client.Call("API.DumpDB", "", &database); err != nil {
 			log.Fatal(err)
 		}
 		fmt.Printf("database: %v\n", database)
 		json.NewEncoder(rw).Encode(&database)
 	}
-
 	if r.Method == http.MethodPost && r.URL.Path == "/" {
+		p := &Pusa{}
+		if err := json.NewDecoder(r.Response.Body).Decode(p); err != nil {
+			fmt.Printf("err: %v\n", err)
+			return
+		}
+		if err := h.client.Call("API.Save", p, &reply); err != nil {
+			log.Fatal(err)
+		}
 		return
 	}
-
 }
 
 func StartClient() {
